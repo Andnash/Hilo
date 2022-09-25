@@ -1,0 +1,167 @@
+import random
+
+
+
+class The_game:
+#this class contains the game rules and parameters. It tracks points, takes guesses, and flips the cards, then checks for success.
+    def _init_(self):
+        self.points = 0
+        self.still_playing = ''
+        
+   
+    def start_game(self):
+    #this function just sets up the game. Points start at 300, it says the game is active, and that while active, cards can now be revealed.
+        self.points = 300
+        self.still_playing = True
+        while self.still_playing:
+            reveal_card = Card()
+            self.card = reveal_card.drawn()
+            self.card_text = reveal_card.card_img()
+            self.player_input()
+           # self.guess_results()
+            self.point_calc()
+
+            if self.still_playing == False:
+                break
+
+            self.play_again()
+
+        
+    def player_input(self):
+        #this is the function that lets you see what the prior number was, and then make a guess of higher or lower. 
+
+        while True:
+            #added .lower to the input. Kept trying to type in letters and accidentally had capslock on...
+            self.guess = input('Will the next card be higher or lower? [h/l]: ').lower()
+            print()
+
+            if self.guess == 'l' or self.guess == 'h':
+
+                while True:
+                #checks your guess against the new card.
+                    reveal_card = Card()
+                    self.next_draw = reveal_card.drawn()
+                    if self.next_draw == self.card:
+                        continue
+                    else:
+                        break
+
+                print(f'The next card was: {self.next_draw}')
+                break
+
+            else:
+                print('That was not one of the options...')
+                continue
+
+    def point_calc(self):
+    #this just determines if your guess earns or loses points and then adds/subtracts those points.
+
+        if self.points >= 1:
+            if (self.card < self.next_draw and self.guess == 'l') or (self.card > self.next_draw and self.guess == 'h'):
+                print('You lost 75 points...')
+                print()
+                self.points -= 75
+            else:
+                print('You earned 100 points!')
+                print()
+                self.points += 100
+            print(f'Your new score is: {self.points}')
+
+        else:
+            self.still_playing = False
+            print('GAME OVER! You have no more points to spend...')
+
+
+
+
+
+    def play_again(self):
+        # this function checks if you have the points to keep playing. If so, asks if you actually want to do so.
+        
+        if self.points > 0:
+
+            play_more = input('Shall we continue the game? [y/n]: ')
+
+            if play_more == 'y':
+                self.still_playing = True
+            else:
+                print()
+                print(f'GAME OVER: Your final score was: {self.points}')
+                self.still_playing = False
+        else:
+            print()
+            print('GAME OVER! You have no more points to spend...')
+            self.still_playing = False
+            
+            #this next line allows the game to end by switching to a False state.
+                
+
+
+
+
+
+#--------------------This line is here to help visually separate my classes while debugging-------------------------------------------------
+
+
+
+class Card:
+#this class keeps track of the current card being shown, as well as the next card to be revealed.
+    def __init__(self):
+        self.current_card = 0
+
+    def drawn(self):
+        self.current_card = (random.randint(1,13))
+        
+        return self.current_card
+
+        
+    def card_img(self):
+        x = self.current_card
+        print (f'The card is {x}')
+
+    # I added an extra space to my card images just after the 'x}', because without it the lines aren't lined up correctly.
+        if x == 10:            
+            print (f"""  
+                     _ _
+                    |    | 
+                    | {x} |
+                    |_ _ |
+                    """)
+        elif x == 11:
+            print (f"""  
+                 _ _
+                |    | 
+                | {x} |
+                |_ _ |
+                """)
+        elif x == 12:
+            print (f"""  
+                 _ _
+                |    | 
+                | {x} |
+                |_ _ |
+                """)
+        elif x == 13:
+            print (f"""  
+                 _ _
+                |    | 
+                | {x} |
+                |_ _ |
+                """)
+        else:
+            print (f"""  
+                 _ _
+                |    | 
+                | {x}  |
+                |_ _ |
+                """)
+            
+def main():
+    thegame = The_game()
+    thegame.start_game()
+    
+    
+# Of course you have to have this magic bit of code below.
+    
+if __name__ == "__main__":
+    main()
